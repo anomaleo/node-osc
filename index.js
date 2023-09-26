@@ -1,4 +1,24 @@
-var osc = require("osc");
+let osc = require("osc");
+
+/*******************
+ * CLI Parameters: 
+ 	incoming-osc port
+ 	outgoing-osc-port *
+ *******************/
+ 
+let inPort = 0;
+let outPort = 0;
+let oscnamespace = "";
+
+if (process.argv.length !== 5) {
+	console.error('Expect three parameters i.e. node index.js 8000 8001 /OSC/NAMESPACE');
+	process.exit(1);
+} else {
+	inPort = process.argv[2];
+	outPort = process.argv[3];
+	oscnamespace = process.argv[4];
+	console.log("Corrected: " + oscnamespace);
+}
 
 /*******************
  * OSC Over Serial *
@@ -20,7 +40,7 @@ var osc = require("osc");
 /****************
  * OSC Over UDP *
  ****************/
-
+ 
 var getIPAddresses = function () {
     var os = require("os"),
         interfaces = os.networkInterfaces(),
@@ -42,9 +62,8 @@ var getIPAddresses = function () {
 
 var udpServer = new osc.UDPPort({
     localAddress: "0.0.0.0",
-    localPort: 8000
+    localPort: inPort
 });
-
 
 
 udpServer.on("ready", function () {
@@ -60,7 +79,7 @@ udpServer.on("ready", function () {
 udpServer.on("message", function (oscMessage) {
 
 	// Android Phone OSC MESSAGE FORMAT /eo/touch0
-	if(oscMessage.address === "/eo/touch0") {
+	if(oscMessage.address === oscnamespace) {
 		for (let i = 0; i < oscMessage.args.length; i++) { 
 		 
 			let _t = parseFloat(oscMessage.args[i]); // toPrecision(5)
@@ -68,12 +87,13 @@ udpServer.on("message", function (oscMessage) {
 		}
 	}
 	
+	console.log("ROUTED OSC MESSAGE: ");
 	console.log(oscMessage);
 	
     udpServer.send({
     	address: oscMessage.address,
         args: oscMessage.args
-	}, "127.0.0.1", 9000);
+	}, "127.0.0.1", outPort);
 });
 
 
