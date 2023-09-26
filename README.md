@@ -7,8 +7,8 @@ or any other OSC listening client on a local machine.
 Software Requirements: 
 Install the latest Node.js LTS distribution from here https://nodejs.org/en.
 
-Running node-osc from source code
-Clone this repository: git clone git@github.com:anomaleo/node-osc.git
-Navigate to repository folder: cd node-osc
-Install dependencies: npm install
-Run: node index.js 8010 8011 /OSC/NAMESPACE
+Running node-osc from source code </ br>
+Clone this repository: git clone git@github.com:anomaleo/node-osc.git  </ br>
+Navigate to repository folder: cd node-osc  </ br>
+Install dependencies: npm install  </ br>
+Run: node index.js 8010 8011 /OSC/NAMESPACE  </ br>
